@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Union
 
 from fastapi import FastAPI, Depends
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, Field
 from sse_starlette.sse import EventSourceResponse, ServerSentEvent
@@ -120,6 +120,43 @@ class ChatAPIApp:
         )
         return readme_html
 
+    def summarize(self, text: str):
+        # Check if word count is not more than 500
+        word_count = len(text.split())
+        if word_count > 500:
+            return JSONResponse(content={"error": "Text exceeds 500 words"}, status_code=400)
+
+        # Make an API call to /api/v1/chat/completions endpoint
+        api_url = "https://openaiapi-ytg7.onrender.com/api/v1/chat/completions"  # Update with your actual API URL
+        payload = {
+            "model": "mixtral-8x7b",
+            "messages": [
+                {"role": "assistant", "content": "You are good at summarizing long and lengthy text into some piece of lines."},
+                {"role": "user", "content": f"Summarize this text now: {text}"},
+            ],
+            "temperature": 0.5,
+            "top_p": 0.95,
+            "max_tokens": -1,
+            "use_cache": True,
+            "stream": False,
+        }
+
+        try:
+            response = requests.post(api_url, json=payload)
+            response.raise_for_status()
+            result = response.json()
+
+            # Assuming the API response contains a "choices" field
+            if "choices" in result:
+                return {"summary": result["choices"][0]["message"]["content"]}
+            else:
+                return JSONResponse(content={"error": "Invalid API response"}, status_code=500)
+
+
+        except requests.exceptions.RequestException as e:
+            return JSONResponse(content={"error": f"API request failed: {str(e)}"}, status_code=500)
+
+
     def setup_routes(self):
         for prefix in ["", "/v1", "/api", "/api/v1"]:
             if prefix in ["/api/v1"]:
@@ -138,6 +175,14 @@ class ChatAPIApp:
                 summary="Chat completions in conversation session",
                 include_in_schema=include_in_schema,
             )(self.chat_completions)
+
+            # New endpoint for summarization
+            self.app.post(
+                prefix + "/summarize",
+                summary="Summarize text",
+                response_model=dict,
+                include_in_schema=include_in_schema,
+            )(self.summarize)
         self.app.get(
             "/readme",
             summary="README of HF LLM API",
