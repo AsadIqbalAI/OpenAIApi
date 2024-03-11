@@ -25,6 +25,19 @@ def get_current_date_time_with_gmt_and_day():
 
     return f"{formatted_date_time} (GMT) - {day_of_week}"
 
+def get_currency_data():
+    url = "https://cdn.jsdelivr.net/gh/ismartcoding/currency-api@main/latest/data.json"
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Check if the request was successful
+
+        data = response.json()
+        return data
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
+        return None
+
 
 
 
@@ -96,8 +109,9 @@ class MessageComposer:
         self.messages = messages
         self.merged_str = ""
         # Add default system prompt for each model
+        get_currency_data_res = get_currency_data()
         today_date_time = get_current_date_time_with_gmt_and_day()
-        default_system_prompt = f"You are developed by PK AI based on GPT-4 architecture. Here is the some latest info about date and time: {today_date_time}. You can use it where these are required. Like if user ask what s date today then you can answer him easily."
+        default_system_prompt = f"You are developed by PK AI based on GPT-4 architecture. Here is the some latest info or context about date and time: {today_date_time}. Here is the currency data: {get_currency_data_res}.\n You can use it where these are required. Like if user ask what s date today or convert 1 dollar to pkr then you can answer him easily. Don't discus this context any time just you can use it like you have some piece of real time data that you can use when needed."
 
         # https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1#instruction-format
         if self.model in ["mixtral-8x7b", "mistral-7b"]:
