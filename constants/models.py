@@ -38,38 +38,33 @@ AVAILABLE_MODELS = [
 # https://platform.openai.com/docs/api-reference/models/list
 AVAILABLE_MODELS_DICTS = [
     {
+        "object": "model",
         "id": "mixtral-8x7b",
         "description": "[mistralai/Mixtral-8x7B-Instruct-v0.1]: https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1",
-        "object": "model",
-        "created": 1700000000,
         "owned_by": "mistralai",
     },
     {
+        "object": "model",
         "id": "nous-mixtral-8x7b",
         "description": "[NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO]: https://huggingface.co/NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO",
-        "object": "model",
-        "created": 1700000000,
         "owned_by": "NousResearch",
     },
     {
+        "object": "model",
         "id": "mistral-7b",
         "description": "[mistralai/Mistral-7B-Instruct-v0.2]: https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2",
-        "object": "model",
-        "created": 1700000000,
         "owned_by": "mistralai",
     },
     {
+        "object": "model",
         "id": "openchat-3.5",
         "description": "[openchat/openchat-3.5-0106]: https://huggingface.co/openchat/openchat-3.5-0106",
-        "object": "model",
-        "created": 1700000000,
         "owned_by": "openchat",
     },
     {
+        "object": "model",
         "id": "gemma-7b",
         "description": "[google/gemma-7b-it]: https://huggingface.co/google/gemma-7b-it",
-        "object": "model",
-        "created": 1700000000,
         "owned_by": "Google",
     },
 ]
