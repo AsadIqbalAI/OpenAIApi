@@ -1,6 +1,6 @@
 import re
 from pprint import pprint
-
+import requests
 from transformers import AutoTokenizer
 
 from constants.models import AVAILABLE_MODELS, MODEL_MAP
