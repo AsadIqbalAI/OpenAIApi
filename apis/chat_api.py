@@ -155,6 +155,37 @@ class ChatAPIApp:
         except requests.RequestException as e:
             return JSONResponse(content={"error": f"Request error: {str(e)}"}, status_code=500)
 
+    def explain_complex(self, data: dict): 
+        topic = data.get("topic", "")  
+
+        api_url = "https://openaiapi-ytg7.onrender.com/api/v1/chat/completions"
+        payload = {
+            "model": "mixtral-8x7b",
+            "messages": [
+                {"role": "assistant", "content": "You are good at explaining difficult topics like cloud computing etc. Explain the topic for 5 years old. make sure to also provided the examples where required."},
+                {"role": "user", "content": f"Explain this topic for 5 years od: {topic}"},
+            ],
+            "temperature": 0.5,
+            "top_p": 0.95,
+            "max_tokens": -1,
+            "use_cache": True,
+            "stream": False,
+        }
+
+        try:
+            response = requests.post(api_url, json=payload)
+            response.raise_for_status()
+            result = response.json()
+
+            if "choices" in result and result["choices"]:
+                return {"explanation": result["choices"][0]["message"]["content"]}
+            else:
+                return JSONResponse(content={"error": "Invalid API response"}, status_code=500)
+
+        except requests.RequestException as e:
+            return JSONResponse(content={"error": f"Request error: {str(e)}"}, status_code=500)
+
+
 
     def setup_routes(self):
         for prefix in ["", "/v1", "/api", "/api/v1"]:
@@ -174,8 +205,14 @@ class ChatAPIApp:
                 summary="Chat completions in conversation session",
                 include_in_schema=include_in_schema,
             )(self.chat_completions)
+            
+            self.app.post(
+                prefix + "/explain_complex",
+                summary="Explain complex text",
+                response_model=dict,
+                include_in_schema=include_in_schema,
+            )(self.explain_complex)
 
-            # New endpoint for summarization
             self.app.post(
                 prefix + "/summarize",
                 summary="Summarize text",
