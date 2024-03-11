@@ -137,7 +137,6 @@ class MessageStreamer:
         return stream_response
 
     def chat_return_dict(self, stream_response):
-        # https://platform.openai.com/docs/guides/text-generation/chat-completions-response-format
         final_output = self.message_outputer.default_data.copy()
         final_output["choices"] = [
             {
@@ -152,6 +151,7 @@ class MessageStreamer:
         logger.back(final_output)
 
         final_content = ""
+        token_count = 0  # New variable to count tokens
         for line in stream_response.iter_lines():
             if not line:
                 continue
@@ -163,14 +163,21 @@ class MessageStreamer:
             else:
                 logger.back(content, end="")
                 final_content += content
+                # Increment token count
+                token_count += self.count_tokens(content)
 
         if self.model in STOP_SEQUENCES_MAP.keys():
             final_content = final_content.replace(self.stop_sequences, "")
 
         final_content = final_content.strip()
         final_output["choices"][0]["message"]["content"] = final_content
-        return final_output
 
+        # Include token count in the output
+        final_output["token_count"] = token_count
+        logger.note(f"Total Tokens Used: {token_count}")
+
+        return final_output
+        
     def chat_return_generator(self, stream_response):
         is_finished = False
         line_count = 0
