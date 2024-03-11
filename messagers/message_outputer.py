@@ -10,7 +10,7 @@ class OpenaiStreamOutputer:
     def __init__(self):
         self.default_data = {
             "content_type": "Completions",
-            "model": "hugginface",
+            "model": "As_Provided",
             "choices": [],
         }
 
