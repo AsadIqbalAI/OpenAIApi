@@ -76,11 +76,11 @@ class ChatAPIApp:
             description="(int) Max tokens",
         )
         use_cache: bool = Field(
-            default=False,
+            default=True,
             description="(bool) Use cache",
         )
         stream: bool = Field(
-            default=True,
+            default=False,
             description="(bool) Stream",
         )
 
