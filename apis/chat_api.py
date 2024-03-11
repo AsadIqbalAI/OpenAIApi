@@ -121,14 +121,14 @@ class ChatAPIApp:
         )
         return readme_html
 
-    def summarize(self, text: str):
-        # Check if word count is not more than 500
+    def summarize(self, data: dict):  # Updated parameter type to 'dict'
+        text = data.get("text", "")  # Using get() to handle missing key gracefully
         word_count = len(text.split())
+
         if word_count > 500:
             return JSONResponse(content={"error": "Text exceeds 500 words"}, status_code=400)
 
-        # Make an API call to /api/v1/chat/completions endpoint
-        api_url = "https://openaiapi-ytg7.onrender.com/api/v1/chat/completions"  # Update with your actual API URL
+        api_url = "https://openaiapi-ytg7.onrender.com/api/v1/chat/completions"
         payload = {
             "model": "mixtral-8x7b",
             "messages": [
@@ -147,15 +147,13 @@ class ChatAPIApp:
             response.raise_for_status()
             result = response.json()
 
-            # Assuming the API response contains a "choices" field
-            if "choices" in result:
+            if "choices" in result and result["choices"]:
                 return {"summary": result["choices"][0]["message"]["content"]}
             else:
                 return JSONResponse(content={"error": "Invalid API response"}, status_code=500)
 
-
-        except requests.exceptions.RequestException as e:
-            return JSONResponse(content={"error": f"API request failed: {str(e)}"}, status_code=500)
+        except requests.RequestException as e:
+            return JSONResponse(content={"error": f"Request error: {str(e)}"}, status_code=500)
 
 
     def setup_routes(self):
