@@ -5,12 +5,27 @@ from transformers import AutoTokenizer
 
 from constants.models import AVAILABLE_MODELS, MODEL_MAP
 from utils.logger import logger
-from datetime import datetime
 
-def get_current_date_time():
-    current_date_time = datetime.now()
-    formatted_date_time = current_date_time.strftime("%Y-%m-%d %H:%M:%S")
-    return formatted_date_time
+from datetime import datetime
+import pytz
+
+def get_current_date_time_with_gmt_and_day():
+    # Get the current date and time in UTC
+    current_date_time_utc = datetime.utcnow()
+
+    # Convert UTC time to a specific timezone (e.g., GMT)
+    gmt_timezone = pytz.timezone("GMT")
+    current_date_time_gmt = current_date_time_utc.replace(tzinfo=pytz.utc).astimezone(gmt_timezone)
+
+    # Get the day of the week
+    day_of_week = current_date_time_gmt.strftime("%A")
+
+    # Format the date and time string
+    formatted_date_time = current_date_time_gmt.strftime("%Y-%m-%d %H:%M:%S %Z")
+
+    return f"{formatted_date_time} (GMT) - {day_of_week}"
+
+
 
 
 class MessageComposer:
@@ -81,7 +96,7 @@ class MessageComposer:
         self.messages = messages
         self.merged_str = ""
         # Add default system prompt for each model
-        today_date_time = get_current_date_time()
+        today_date_time = get_current_date_time_with_gmt_and_day()
         default_system_prompt = f"You are developed by PK AI based on GPT-4 architecture. Here is the some latest info about date and time: {today_date_time}. You can use it where these are required. Like if user ask what s date today then you can answer him easily."
 
         # https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1#instruction-format
