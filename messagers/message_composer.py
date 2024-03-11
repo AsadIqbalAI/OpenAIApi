@@ -132,6 +132,7 @@ class MessageComposer:
         elif self.model in ["openchat-3.5"]:
             self.messages = self.concat_messages_by_role(messages)
             self.merged_str_list = []
+            self.merged_str_list.append(f"GPT4 Correct System:\n{default_system_prompt}")
             self.end_of_turn = "<|end_of_turn|>"
             for message in self.messages:
                 role = message["role"]
@@ -152,10 +153,12 @@ class MessageComposer:
             self.merged_str = "\n".join(self.merged_str_list)
         # https://huggingface.co/google/gemma-7b-it#chat-template
         elif self.model in ["gemma-7b"]:
+            gemma_system_prompt = f"Here is the some latest info about date and time: {today_date_time}. You can use it where these are required. Like if user ask what s date today then you can answer him easily."
             self.messages = self.concat_messages_by_role(messages)
             self.merged_str_list = []
             self.end_of_turn = "<end_of_turn>"
             self.start_of_turn = "<start_of_turn>"
+            self.merged_str_list.append(f"{self.start_of_turn}system\n{gemma_system_prompt}{self.end_of_turn}")
             for message in self.messages:
                 role = message["role"]
                 content = message["content"]
