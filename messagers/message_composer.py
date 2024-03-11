@@ -107,10 +107,12 @@ class MessageComposer:
                 role = message["role"]
                 content = message["content"]
                 if role in self.inst_roles:
-                    self.cached_str = f"[INST] {content} [/INST]"
+                    self.cached_str = f"[INST] system: {default_system_prompt}. \n{content} [/INST]"
                 elif role in self.answer_roles:
+                    self.cached_str += f"[INST]<s>system prompt: {default_system_prompt}</s> [/INST]"
                     self.merged_str += f"<s> {self.cached_str} {content} </s>\n"
                     self.cached_str = ""
+
                 else:
                     self.cached_str = f"[INST] {content} [/INST]"
             if self.cached_str:
