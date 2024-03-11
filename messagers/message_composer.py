@@ -5,6 +5,12 @@ from transformers import AutoTokenizer
 
 from constants.models import AVAILABLE_MODELS, MODEL_MAP
 from utils.logger import logger
+from datetime import datetime
+
+def get_current_date_time():
+    current_date_time = datetime.now()
+    formatted_date_time = current_date_time.strftime("%Y-%m-%d %H:%M:%S")
+    return formatted_date_time
 
 
 class MessageComposer:
@@ -74,6 +80,9 @@ class MessageComposer:
 
         self.messages = messages
         self.merged_str = ""
+        # Add default system prompt for each model
+        today_date_time = get_current_date_time()
+        default_system_prompt = f"You are developed by PK AI based on GPT-4 architecture. Here is the some latest info about date and time: {today_date_time}. You can use it where these are required. Like if user ask what s date today then you can answer him easily."
 
         # https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1#instruction-format
         if self.model in ["mixtral-8x7b", "mistral-7b"]:
@@ -94,6 +103,7 @@ class MessageComposer:
         # https://huggingface.co/NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO#prompt-format
         elif self.model in ["nous-mixtral-8x7b"]:
             self.merged_str_list = []
+            self.merged_str_list.append(f"<|im_start|>system\n{default_system_prompt} <|im_end|>")
             for message in self.messages:
                 role = message["role"]
                 content = message["content"]
