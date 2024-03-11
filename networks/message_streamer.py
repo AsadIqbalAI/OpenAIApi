@@ -173,7 +173,7 @@ class MessageStreamer:
         final_output["choices"][0]["message"]["content"] = final_content
 
         # Include token count in the output
-        final_output["token_count"] = token_count
+        final_output["tokens_used"] = token_count
         logger.note(f"Total Tokens Used: {token_count}")
 
         return final_output
