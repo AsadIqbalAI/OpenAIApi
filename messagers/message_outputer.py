@@ -9,10 +9,7 @@ class OpenaiStreamOutputer:
 
     def __init__(self):
         self.default_data = {
-            "created": 1700000000,
-            "id": "chatcmpl-hugginface",
-            "object": "chat.completion.chunk",
-            # "content_type": "Completions",
+            "content_type": "Completions",
             "model": "hugginface",
             "choices": [],
         }
