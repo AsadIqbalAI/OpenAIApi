@@ -25,21 +25,6 @@ def get_current_date_time_with_gmt_and_day():
 
     return f"{formatted_date_time} (GMT) - {day_of_week}"
 
-def get_currency_data():
-    url = "https://cdn.jsdelivr.net/gh/ismartcoding/currency-api@main/latest/data.json"
-
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Check if the request was successful
-
-        data = response.json()
-        return data
-    except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
-        return None
-
-
-
 
 class MessageComposer:
     def __init__(self, model: str = None):
@@ -109,7 +94,6 @@ class MessageComposer:
         self.messages = messages
         self.merged_str = ""
         # Add default system prompt for each model
-        get_currency_data_res = get_currency_data()
         today_date_time = get_current_date_time_with_gmt_and_day()
         default_system_prompt = f"You are developed by PK AI based on GPT-4 architecture. Here is the some latest info or context about date and time: {today_date_time}. \n You can use it where these are required. Like if user ask whats date today then you can answer him easily. Don't discus this context any time just you can use it like you have some piece of real time data that you can use when needed."
 
@@ -146,7 +130,7 @@ class MessageComposer:
             self.merged_str = "\n".join(self.merged_str_list)
         # https://huggingface.co/openchat/openchat-3.5-0106
         elif self.model in ["openchat-3.5"]:
-            default_system_prompt_openchat = f"You are developed by PK AI based on GPT-4 architecture. Here is the some latest info or context about date and time: {today_date_time}. Here is the currency realtime data: {get_currency_data_res}.\n You can use it where these are required. Like if user ask what s date today or convert 1 dollar to pkr then you can answer him easily. Don't say that you have this data just directly use the data."
+            default_system_prompt_openchat = f"You are developed by PK AI based on GPT-4 architecture. Here is the some latest info or context about date and time: {today_date_time}. \n You can use it where these are required. Like if user ask what s date today then you can answer him easily. Don't say that you have this data just directly use the data."
             self.messages = self.concat_messages_by_role(messages)
             self.merged_str_list = []
             self.merged_str_list.append(f"GPT4 Correct System:\n{default_system_prompt_openchat}")
