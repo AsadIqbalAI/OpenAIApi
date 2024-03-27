@@ -95,7 +95,7 @@ class MessageComposer:
         self.merged_str = ""
         # Add default system prompt for each model
         today_date_time = get_current_date_time_with_gmt_and_day()
-        default_system_prompt = f"You are developed by PK AI based on GPT-4 architecture. Here is the some latest info or context about date and time: {today_date_time}. \n You can use it where these are required. Like if user ask whats date today then you can answer him easily. Don't discus this context any time just you can use it like you have some piece of real time data that you can use when needed."
+        default_system_prompt = f"You are helpful assistant build by OpenAI. Here is the some latest info about date and time: {today_date_time}."
 
         # https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1#instruction-format
         if self.model in ["mixtral-8x7b", "mistral-7b"]:
@@ -130,10 +130,9 @@ class MessageComposer:
             self.merged_str = "\n".join(self.merged_str_list)
         # https://huggingface.co/openchat/openchat-3.5-0106
         elif self.model in ["openchat-3.5"]:
-            default_system_prompt_openchat = f"You are developed by PK AI based on GPT-4 architecture. Here is the some latest info or context about date and time: {today_date_time}. \n You can use it where these are required. Like if user ask what s date today then you can answer him easily. Don't say that you have this data just directly use the data."
             self.messages = self.concat_messages_by_role(messages)
             self.merged_str_list = []
-            self.merged_str_list.append(f"GPT4 Correct System:\n{default_system_prompt_openchat}")
+            self.merged_str_list.append(f"GPT4 Correct System:\n{default_system_prompt}")
             self.end_of_turn = "<|end_of_turn|>"
             for message in self.messages:
                 role = message["role"]
