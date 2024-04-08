@@ -156,6 +156,18 @@ class ChatAPIApp:
         except requests.RequestException as e:
             return JSONResponse(content={"error": f"Request error: {str(e)}"}, status_code=500)
 
+    async def whisper(self, filename: bytes):
+        try:
+            API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3"
+            headers = {"Authorization": "Bearer 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"}
+    
+            response = requests.post(API_URL, headers=headers, data=filename)
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            return JSONResponse(content={"error": f"Request error: {str(e)}"}, status_code=500)
+
+
     def explain_complex(self, data: dict): 
         topic = data.get("topic", "")  
 
@@ -220,6 +232,13 @@ class ChatAPIApp:
                 response_model=dict,
                 include_in_schema=include_in_schema,
             )(self.summarize)
+            self.app.post(
+                prefix + "/whisper_v3",
+                summary="Send a whisper",
+                response_model=dict,
+                include_in_schema=include_in_schema,
+            )(self.whisper)
+
         self.app.get(
             "/readme",
             summary="README of HF LLM API",
