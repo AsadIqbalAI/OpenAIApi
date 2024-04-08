@@ -161,10 +161,10 @@ class ChatAPIApp:
 
 
     
-    async def process_audio_from_url(self, audio_url: str):
+    async def process_audio_from_url(self, audioUrl: str):
         try:
             # Download the audio file from the URL
-            audio_response = requests.get(audio_url)
+            audio_response = requests.get(audioUrl)
             
             # Check if the request was successful
             audio_response.raise_for_status()
@@ -251,7 +251,7 @@ class ChatAPIApp:
                 response_model=dict,
                 include_in_schema=include_in_schema,
             )(self.summarize)
-            self.app.post(
+            self.app.get(
                 prefix + "/whisper_v3",
                 summary="Send a whisper",
                 response_model=dict,
