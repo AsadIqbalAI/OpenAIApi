@@ -160,24 +160,24 @@ class ChatAPIApp:
 
     from fastapi import FastAPI, File, UploadFile, HTTPException
         
-    async def process_file(file: UploadFile = File(...)):
-        try:
-            # Read the file content as bytes
-            file_content = await file.read()
+    async def process_file(self, file: UploadFile = File(...)):
+            try:
+                # Read the file content as bytes
+                file_content = await file.read()
     
-            # Send the file content to the API
-            API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3"
-            headers = {"Authorization": "Bearer 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"}
-            response = requests.post(API_URL, headers=headers, data=file_content)
+                # Send the file content to the API
+                API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3"
+                headers = {"Authorization": "Bearer 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"}
+                response = requests.post(API_URL, headers=headers, data=file_content)
     
-            # Check if the request was successful
-            response.raise_for_status()
+                # Check if the request was successful
+                response.raise_for_status()
     
-            # Return the API response
-            return response.json()
-        except Exception as e:
-            # If there's an error, return an HTTPException with a status code of 500
-            raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+                # Return the API response
+                return response.json()
+            except Exception as e:
+                # If there's an error, return an HTTPException with a status code of 500
+                raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
 
     def explain_complex(self, data: dict): 
