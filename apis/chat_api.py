@@ -4,6 +4,7 @@ import os
 import sys
 import uvicorn
 import requests
+from fastapi import UploadFile, File
 
 from pathlib import Path
 from typing import Union
@@ -156,17 +157,19 @@ class ChatAPIApp:
         except requests.RequestException as e:
             return JSONResponse(content={"error": f"Request error: {str(e)}"}, status_code=500)
 
-    async def whisper(self, filename: bytes):
+    async def whisper(self, file: UploadFile = File(...)):
         try:
-            whisper_url = "https://api-inference.huggingface.co/models/openai/whisper-large-v3"    
-            whisper_headers = {"Authorization": "Bearer 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"}
+            whisper_url = "https://api-inference.huggingface.co/models/openai/whisper-large-v3"
     
-            response = requests.post(whisper_url, headers=whisper_headers, data=filename)
+            whisper_headers = {"Authorization": f"Bearer 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"}
+    
+            file_content = await file.read()  # Read file content as bytes
+    
+            response = requests.post(whisper_url, headers=whisper_headers, data=file_content)
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
             return JSONResponse(content={"error": f"Request error: {str(e)}"}, status_code=500)
-
 
 
     def explain_complex(self, data: dict): 
