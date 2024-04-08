@@ -158,14 +158,15 @@ class ChatAPIApp:
 
     async def whisper(self, filename: bytes):
         try:
-            API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3"
-            headers = {"Authorization": "Bearer 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"}
+            whisper_url = "https://api-inference.huggingface.co/models/openai/whisper-large-v3"    
+            whisper_headers = {"Authorization": "Bearer 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"}
     
-            response = requests.post(API_URL, headers=headers, data=filename)
+            response = requests.post(whisper_url, headers=whisper_headers, data=filename)
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
             return JSONResponse(content={"error": f"Request error: {str(e)}"}, status_code=500)
+
 
 
     def explain_complex(self, data: dict): 
