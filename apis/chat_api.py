@@ -261,7 +261,7 @@ class ChatAPIApp:
                 summary="Send a whisper",
                 response_model=dict,
                 include_in_schema=include_in_schema,
-            )(self.process_file)
+            )(self.process_audio_from_url)
 
 
         self.app.get(
