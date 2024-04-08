@@ -5,7 +5,6 @@ import sys
 import uvicorn
 import requests
 from fastapi import UploadFile, File
-os.system('pip install python-multipart')
 
 from pathlib import Path
 from typing import Union
@@ -158,7 +157,6 @@ class ChatAPIApp:
         except requests.RequestException as e:
             return JSONResponse(content={"error": f"Request error: {str(e)}"}, status_code=500)
 
-    import requests
     from typing import Union
     from io import BytesIO
     
@@ -186,8 +184,6 @@ class ChatAPIApp:
         except Exception as e:
             # If there's an error, return an error dictionary
             return {"error": f"An error occurred: {str(e)}"}
-
-
 
 
     def explain_complex(self, data: dict): 
