@@ -160,24 +160,36 @@ class ChatAPIApp:
 
     from fastapi import FastAPI, File, UploadFile, HTTPException
         
-    async def process_file(self, file: UploadFile = File(...)):
-            try:
-                # Read the file content as bytes
-                file_content = file.file.read()
+    import requests
+    from fastapi import HTTPException, UploadFile
+    from typing import Union
+    from io import BytesIO
     
-                # Send the file content to the API
-                API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3"
-                headers = {"Authorization": "Bearer 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"}
-                response = requests.post(API_URL, headers=headers, data=file_content)
+    async def process_audio_from_url(self, audio_url: str):
+        try:
+            # Download the audio file from the URL
+            audio_response = requests.get(audio_url)
+            
+            # Check if the request was successful
+            audio_response.raise_for_status()
     
-                # Check if the request was successful
-                response.raise_for_status()
+            # Read the audio file content as bytes
+            audio_content = BytesIO(audio_response.content)
     
-                # Return the API response
-                return response.json()
-            except Exception as e:
-                # If there's an error, return an HTTPException with a status code of 500
-                raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+            # Send the audio content to the API
+            API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3"
+            headers = {"Authorization": "Bearer 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"}
+            response = requests.post(API_URL, headers=headers, data=audio_content)
+    
+            # Check if the request was successful
+            response.raise_for_status()
+    
+            # Return the API response
+            return response.json()
+        except Exception as e:
+            # If there's an error, return an HTTPException with a status code of 500
+            raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+
 
 
     def explain_complex(self, data: dict): 
