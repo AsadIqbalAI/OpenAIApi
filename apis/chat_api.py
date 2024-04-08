@@ -163,7 +163,7 @@ class ChatAPIApp:
     async def process_file(self, file: UploadFile = File(...)):
             try:
                 # Read the file content as bytes
-                file_content = await file.read()
+                file_content = file.file.read()
     
                 # Send the file content to the API
                 API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3"
