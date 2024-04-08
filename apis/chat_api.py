@@ -161,7 +161,6 @@ class ChatAPIApp:
     from fastapi import FastAPI, File, UploadFile, HTTPException
         
     import requests
-    from fastapi import HTTPException, UploadFile
     from typing import Union
     from io import BytesIO
     
@@ -187,8 +186,9 @@ class ChatAPIApp:
             # Return the API response
             return response.json()
         except Exception as e:
-            # If there's an error, return an HTTPException with a status code of 500
-            raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+            # If there's an error, print the error message
+            print(f"An error occurred: {str(e)}")
+            return None
 
 
 
