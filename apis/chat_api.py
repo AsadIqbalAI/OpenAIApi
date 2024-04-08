@@ -21,6 +21,8 @@ from networks.message_streamer import MessageStreamer
 from utils.logger import logger
 from constants.models import AVAILABLE_MODELS_DICTS
 import json
+from typing import Union
+from io import BytesIO
 
 
 class ChatAPIApp:
@@ -157,8 +159,7 @@ class ChatAPIApp:
         except requests.RequestException as e:
             return JSONResponse(content={"error": f"Request error: {str(e)}"}, status_code=500)
 
-    from typing import Union
-    from io import BytesIO
+
     
     async def process_audio_from_url(self, audio_url: str):
         try:
