@@ -159,14 +159,14 @@ class ChatAPIApp:
         except requests.RequestException as e:
             return JSONResponse(content={"error": f"Request error: {str(e)}"}, status_code=500)
 
-    captionAPI_URL = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large"
-    captionheaders = {"Authorization": "Bearer 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"}
 
     async def caption_image(self, file: UploadFile = File(...)):
+        API_URL = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large"
+        headers = {"Authorization": "Bearer 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"}
         try:
             filename = file.filename
             contents = await file.read()
-            response = await requests.post(captionAPI_URL, headers=captionheaders, data=contents)
+            response = await requests.post(API_URL, headers=headers, data=contents)
             response.raise_for_status()  # Raise an exception for HTTP errors
             data = response.json()
             caption = data[0].get("generated_text")
