@@ -166,7 +166,7 @@ class ChatAPIApp:
     async def caption_image(self, file: UploadFile = File(...)): 
         try:
             API_URL = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large"
-            headers = {"Authorization": "Bearer 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"}
+            headers = {"Authorization": "Bearer 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"}
             
             filename = file.filename
             contents = await file.read()
