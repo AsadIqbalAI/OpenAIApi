@@ -13,3 +13,4 @@ transformers
 uvicorn
 websockets
 pytz
+python-multipart
