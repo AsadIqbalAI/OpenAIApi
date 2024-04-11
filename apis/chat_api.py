@@ -5,6 +5,7 @@ import sys
 import uvicorn
 import requests
 from fastapi import UploadFile, File
+import httpx
 
 from pathlib import Path
 from typing import Union
