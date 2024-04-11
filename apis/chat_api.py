@@ -162,17 +162,32 @@ class ChatAPIApp:
 
 
     async def caption_image(self, file: UploadFile = File(...)): 
-        
-        API_URL = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large"
-        headers = {"Authorization": "Bearer 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"}
-        
-        filename = file.filename
-        contents = await file.read()
-        response = requests.post(API_URL, headers=headers, data=contents)
-        data = response.json()
-        caption = data[0]["generated_text"]
-        print(data)
-        return {"filename": filename, "caption": caption}
+        try:
+            API_URL = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large"
+            headers = {"Authorization": "Bearer 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"}
+            
+            filename = file.filename
+            contents = await file.read()
+            
+            # Send the request and handle potential exceptions
+            try:
+                response = requests.post(API_URL, headers=headers, data=contents)
+                response.raise_for_status()  # Raise an exception for HTTP errors
+                data = response.json()
+            except requests.RequestException as e:
+                raise HTTPException(status_code=500, detail=f"Error calling Hugging Face API: {str(e)}")
+            
+            # Extract the caption from the response data
+            try:
+                caption = data[0]["generated_text"]
+            except (KeyError, IndexError) as e:
+                raise HTTPException(status_code=500, detail=f"Invalid response from Hugging Face API: {str(e)}")
+            
+            print(data)
+            return {"filename": filename, "caption": caption}
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+
 
 
     
