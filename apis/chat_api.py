@@ -25,6 +25,8 @@ import json
 from typing import Union
 from io import BytesIO
 
+from fastapi import HTTPException, File, UploadFile
+
 
 class ChatAPIApp:
     def __init__(self):
