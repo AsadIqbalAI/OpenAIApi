@@ -275,7 +275,7 @@ class ChatAPIApp:
                 response_model=dict,
                 include_in_schema=include_in_schema,
             )(self.process_audio_from_url)
-            self.app.get(
+            self.app.post(
                 prefix + "/image-captioning",
                 summary="The new image captioning model is here.",
                 response_model=dict,
