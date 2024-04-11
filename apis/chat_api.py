@@ -162,7 +162,6 @@ class ChatAPIApp:
     captionAPI_URL = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large"
     captionheaders = {"Authorization": "Bearer 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"}
 
-    @self.app.post("/caption-image/")
     async def caption_image(self, file: UploadFile = File(...)):
         try:
             filename = file.filename
@@ -276,6 +275,12 @@ class ChatAPIApp:
                 response_model=dict,
                 include_in_schema=include_in_schema,
             )(self.process_audio_from_url)
+            self.app.get(
+                prefix + "/image-captioning",
+                summary="The new image captioning model is here.",
+                response_model=dict,
+                include_in_schema=include_in_schema,
+            )(self.caption_image)
 
 
         self.app.get(
