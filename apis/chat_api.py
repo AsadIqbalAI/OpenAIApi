@@ -161,22 +161,30 @@ class ChatAPIApp:
 
 
     async def caption_image(self, file: UploadFile = File(...)):
-        API_URL = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large"
-        headers = {"Authorization": "Bearer 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"}
+        
+        API_URL = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large"    
+        headers = {"Authorization": f"Bearer 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"}
+        
         try:
             filename = file.filename
-            contents = await file.read()
-            response = await requests.post(API_URL, headers=headers, data=contents)
-            response.raise_for_status()  # Raise an exception for HTTP errors
-            data = response.json()
+            async with file.file as f:
+                contents = await f.read()
+            
+            async with httpx.AsyncClient() as client:
+                response = await client.post(API_URL, headers=headers, data=contents)
+                response.raise_for_status()  # Raise an exception for HTTP errors
+                data = response.json()
+            
             caption = data[0].get("generated_text")
             if caption is None:
                 raise HTTPException(status_code=500, detail="Caption not found in response")
+            
             return {"filename": filename, "caption": caption}
-        except requests.RequestException as e:
+        except httpx.RequestError as e:
             raise HTTPException(status_code=500, detail=f"Error calling Hugging Face API: {str(e)}")
         except (IndexError, KeyError) as e:
             raise HTTPException(status_code=500, detail=f"Invalid response from Hugging Face API: {str(e)}")
+
 
     
     async def process_audio_from_url(self, audioUrl: str):
