@@ -318,7 +318,6 @@ class ChatAPIApp:
             self.app.post(
                 "/image-generator",
                 summary="The new image captioning model is here.",
-                response_model=image,
                 include_in_schema=include_in_schema,
             )(self.get_image)
 
