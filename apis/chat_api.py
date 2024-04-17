@@ -249,6 +249,26 @@ class ChatAPIApp:
         except requests.RequestException as e:
             return JSONResponse(content={"error": f"Request error: {str(e)}"}, status_code=500)
 
+    models = ["digiplay/AbsoluteReality_v1.8.1","runwayml/stable-diffusion-v1-5","stabilityai/stable-diffusion-xl-base-1.0"]
+
+    def query(payload, model_name):
+        API_URL = f"https://api-inference.huggingface.co/models/{model_name}"
+        headers = {"Authorization": "Bearer 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"}
+        response = requests.post(API_URL, headers=headers, json=payload)
+        return response.content
+
+    def get_image(inputs: str, model: str):
+        if model not in models:
+            return {"error": "Invalid model name"}
+    
+        image_bytes = query({"inputs": inputs}, model)
+        image = Image.open(io.BytesIO(image_bytes))
+        img_io = io.BytesIO()
+        image.save(img_io, format="PNG")
+        img_io.seek(0)
+        return Response(content=img_io.getvalue(), media_type="image/png")
+
+
 
 
     def setup_routes(self):
@@ -295,6 +315,12 @@ class ChatAPIApp:
                 response_model=dict,
                 include_in_schema=include_in_schema,
             )(self.caption_image)
+            self.app.post(
+                "/image-generator",
+                summary="The new image captioning model is here.",
+                response_model=image,
+                include_in_schema=include_in_schema,
+            )(self.get_image)
 
 
         self.app.get(
