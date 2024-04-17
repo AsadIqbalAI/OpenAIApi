@@ -261,16 +261,22 @@ class ChatAPIApp:
         response = requests.post(API_URL, headers=headers, json=payload)
         return response.content
 
-    def get_image(self, inputs: str, model: str):
+    def get_image(self, data: dict):
+        inputs = data.get("prompt")
+        model = data.get("model")
+        if not inputs or not model:
+            return {"error": "Prompt or model not provided"}
+    
         if model not in self.models:
             return {"error": "Invalid model name"}
-
+    
         image_bytes = self.query({"inputs": inputs}, model)
         image = Image.open(io.BytesIO(image_bytes))
         img_io = io.BytesIO()
         image.save(img_io, format="PNG")
         img_io.seek(0)
         return Response(content=img_io.getvalue(), media_type="image/png")
+
 
 
 
