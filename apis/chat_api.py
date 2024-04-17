@@ -257,11 +257,11 @@ class ChatAPIApp:
         response = requests.post(API_URL, headers=headers, json=payload)
         return response.content
 
-    def get_image(inputs: str, model: str):
-        if model not in models:
+    def get_image(self, inputs: str, model: str):
+        if model not in self.models:
             return {"error": "Invalid model name"}
-    
-        image_bytes = query({"inputs": inputs}, model)
+
+        image_bytes = self.query({"inputs": inputs}, model)
         image = Image.open(io.BytesIO(image_bytes))
         img_io = io.BytesIO()
         image.save(img_io, format="PNG")
@@ -316,8 +316,9 @@ class ChatAPIApp:
                 include_in_schema=include_in_schema,
             )(self.caption_image)
             self.app.post(
-                "/image-generator",
+                "/generate-image",
                 summary="The new image captioning model is here.",
+                response_model=Response,
                 include_in_schema=include_in_schema,
             )(self.get_image)
 
