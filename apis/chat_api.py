@@ -251,7 +251,7 @@ class ChatAPIApp:
 
     models = ["digiplay/AbsoluteReality_v1.8.1","runwayml/stable-diffusion-v1-5","stabilityai/stable-diffusion-xl-base-1.0"]
 
-    def query(payload, model_name):
+    def query(self, payload, model_name):  # Define query as a method
         API_URL = f"https://api-inference.huggingface.co/models/{model_name}"
         headers = {"Authorization": "Bearer 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"}
         response = requests.post(API_URL, headers=headers, json=payload)
