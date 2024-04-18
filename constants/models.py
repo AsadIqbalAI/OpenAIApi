@@ -74,7 +74,7 @@ AVAILABLE_MODELS_DICTS = [
     {
         "id": "command-r-plus",
         "description": "[CohereForAI/c4ai-command-r-plus]: https://huggingface.co/CohereForAI/c4ai-command-r-plus",
-        "object": "model",,
+        "object": "model",
         "owned_by": "CohereForAI",
     },
     {
