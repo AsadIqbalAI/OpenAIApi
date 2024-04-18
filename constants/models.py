@@ -81,11 +81,12 @@ AVAILABLE_MODELS_DICTS = [
         "id":"zephyr-orpo-GPT4",
         "desciption":"[HuggingFaceH4/zephyr-orpo-141b-A35b-v0.1]: https://huggingface.co/HuggingFaceH4/zephyr-orpo-141b-A35b-v0.1",
         "object":"model",
-        "owned_by":"Meta",
+        "owned_by":"HuggingFace",
+    },
     {
         "id": "llama-2-70b",
         "desciption":"[meta-llama/Llama-2-70b-chat-hf]: https://huggingface.co/meta-llama/Llama-2-70b-chat-hf",
         "object": "model",
-        "owned_by": "OpenAI",
+        "owned_by": "Meta",
     },
 ]
