@@ -128,6 +128,21 @@ class MessageComposer:
                 self.merged_str_list.append(message_line)
             self.merged_str_list.append("<|im_start|>assistant")
             self.merged_str = "\n".join(self.merged_str_list)
+
+        elif self.model in ["zephyr-orpo-GPT4"]:
+            self.merged_str_list = []
+            self.merged_str_list.append(f"[INST][SYSTEM]\n{default_system_prompt}[/SYSTEM] [/INST]")
+            for message in self.messages:
+                role = message.get("role", self.default_role)
+                content = message.get("content", "")
+                if role not in ["system", "user", "assistant"]:
+                    role = self.default_role
+                message_line = f"[{role}]\n{content}[/{role}]"
+                self.merged_str_list.append(message_line)
+            self.merged_str_list.append("[ASSISTANT]")
+            self.merged_str = "\n".join(self.merged_str_list)
+
+            
         # https://huggingface.co/openchat/openchat-3.5-0106
         elif self.model in ["openchat-3.5"]:
             self.messages = self.concat_messages_by_role(messages)
