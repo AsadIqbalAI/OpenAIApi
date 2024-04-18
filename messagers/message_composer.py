@@ -95,10 +95,10 @@ class MessageComposer:
         self.merged_str = ""
         # Add default system prompt for each model
         today_date_time = get_current_date_time_with_gmt_and_day()
-        default_system_prompt = f"You are helpful assistant build by OpenAI. Here is the some latest info about date and time: {today_date_time}."
+        default_system_prompt = f"You are helpful assistant build by OpenAI. Here is the latest real-time date and time for now: {today_date_time}."
 
         # https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1#instruction-format
-        if self.model in ["mixtral-8x7b", "mistral-7b"]:
+        if self.model in ["mixtral-8x7b", "mistral-7b","zephyr-orpo-GPT4"]:
             self.messages = self.concat_messages_by_role(messages)
             self.cached_str = ""
             for message in self.messages:
