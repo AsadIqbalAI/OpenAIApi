@@ -30,7 +30,7 @@ TOKEN_LIMIT_MAP = {
     "nous-mixtral-8x7b": 32768,
     "mistral-7b": 32768,
     "openchat-3.5": 8192,
-    "llama-2-70b": "8192",
+    "llama-2-70b": 8192,
     "gemma-7b": 8192,
     "gpt-3.5-turbo": 8192,
     "command-r-plus": 32768,
