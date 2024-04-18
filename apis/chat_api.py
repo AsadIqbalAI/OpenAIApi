@@ -139,7 +139,7 @@ class ChatAPIApp:
         if word_count > 500:
             return JSONResponse(content={"error": "Text exceeds 500 words"}, status_code=400)
 
-        api_url = "https://openaiapi-ytg7.onrender.com/api/v1/chat/completions"
+        api_url = "/api/v1/chat/completions"
         payload = {
             "model": "mixtral-8x7b",
             "messages": [
