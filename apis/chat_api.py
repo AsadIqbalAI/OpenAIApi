@@ -170,7 +170,7 @@ class ChatAPIApp:
     async def caption_image(self, file: UploadFile = File(...)): 
         try:
             API_URL = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large"
-            headers = {"Authorization": "Bearer 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"}
+            headers = {"Authorization": "Bearer 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"}
             
             filename = file.filename
             contents = await file.read()
@@ -210,7 +210,7 @@ class ChatAPIApp:
     
             # Send the audio content to the API
             API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3"
-            headers = {"Authorization": "Bearer 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"}
+            headers = {"Authorization": "Bearer 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"}
             response = requests.post(API_URL, headers=headers, data=audio_content)
     
             # Check if the request was successful
