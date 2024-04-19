@@ -98,7 +98,7 @@ class MessageComposer:
         default_system_prompt = f"You are helpful assistant build by OpenAI. Here is the latest real-time date and time for now: {today_date_time}."
 
         # https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1#instruction-format
-        if self.model in ["mixtral-8x7b", "mistral-7b", "llama-3-70b"]:
+        if self.model in ["mixtral-8x7b", "mistral-7b"]:
             self.messages = self.concat_messages_by_role(messages)
             self.cached_str = ""
             for message in self.messages:
@@ -127,6 +127,19 @@ class MessageComposer:
                 message_line = f"<|im_start|>{role}\n{content}<|im_end|>"
                 self.merged_str_list.append(message_line)
             self.merged_str_list.append("<|im_start|>assistant")
+            self.merged_str = "\n".join(self.merged_str_list)
+
+        elif self.model in ["llama-3-70b"]:
+            self.merged_str_list = []
+            self.merged_str_list.append(f"<|eot_id|><|start_header_id|>system\n\n{default_system_prompt} <|end_header_id|><|eot_id|>")
+            for message in self.messages:
+                role = message["role"]
+                content = message["content"]
+                if role not in ["system", "user", "assistant"]:
+                    role = self.default_role
+                message_line = f"<|eot_id|><|start_header_id|>{role}\n\n{content}<|end_header_id|><|eot_id|>"
+                self.merged_str_list.append(message_line)
+            self.merged_str_list.append("<|eot_id|><|start_header_id|>assistant\n\n")
             self.merged_str = "\n".join(self.merged_str_list)
 
         elif self.model in ["zephyr-orpo-GPT4"]:
