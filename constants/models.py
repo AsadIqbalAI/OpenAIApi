@@ -15,7 +15,7 @@ AVAILABLE_MODELS = list(MODEL_MAP.keys())
 
 STOP_SEQUENCES_MAP = {
     "mixtral-8x7b": "</s>",
-    "llama-3-70b": "<eot_id>",
+    "llama-3-70b": "<|eot_id|>",
     "zephyr-orpo-GPT4":"</s>",
     "nous-mixtral-8x7b": "<|im_end|>",
     "mistral-7b": "</s>",
