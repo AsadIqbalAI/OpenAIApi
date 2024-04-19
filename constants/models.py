@@ -7,7 +7,7 @@ MODEL_MAP = {
     "command-r-plus": "CohereForAI/c4ai-command-r-plus",
     "default": "mistralai/Mixtral-8x7B-Instruct-v0.1",
     "zephyr-orpo-GPT4":"HuggingFaceH4/zephyr-orpo-141b-A35b-v0.1",
-    "llama-2-70b":"meta-llama/Llama-2-70b-chat-hf",
+    "llama-3-70b":"meta-llama/Meta-Llama-3-70B-Instruct",
 
 }
 
@@ -15,7 +15,7 @@ AVAILABLE_MODELS = list(MODEL_MAP.keys())
 
 STOP_SEQUENCES_MAP = {
     "mixtral-8x7b": "</s>",
-    "llama-2-70b": "<</SYS>>",
+    "llama-3-70b": "<eot_id>",
     "zephyr-orpo-GPT4":"</s>",
     "nous-mixtral-8x7b": "<|im_end|>",
     "mistral-7b": "</s>",
@@ -30,7 +30,7 @@ TOKEN_LIMIT_MAP = {
     "nous-mixtral-8x7b": 32768,
     "mistral-7b": 32768,
     "openchat-3.5": 8192,
-    "llama-2-70b": 8192,
+    "llama-3-70b": 8192,
     "gemma-7b": 8192,
     "gpt-3.5-turbo": 8192,
     "command-r-plus": 32768,
@@ -84,8 +84,8 @@ AVAILABLE_MODELS_DICTS = [
         "owned_by":"HuggingFace",
     },
     {
-        "id": "llama-2-70b",
-        "desciption":"[meta-llama/Llama-2-70b-chat-hf]: https://huggingface.co/meta-llama/Llama-2-70b-chat-hf",
+        "id": "llama-3-70b",
+        "desciption":"[meta-llama/Meta-Llama-3-70B-Instruct]: https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct",
         "object": "model",
         "owned_by": "Meta",
     },
